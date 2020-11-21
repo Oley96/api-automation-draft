@@ -5,9 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import payloads.CreateUserPayload;
 import payloads.UpdateUserPayload;
-import responses.DefaultResponse;
-import responses.GetUserResponse;
-import responses.UserRegistarationResponse;
+import responses.ApiResponse;
+import responses.UserResponse;
 
 import java.util.Locale;
 
@@ -16,7 +15,7 @@ import static java.lang.String.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class UserTest {
+public class UserControllerTest {
 
     private final UserController userController = new UserController();
     private final Faker faker = new Faker(new Locale("en"));
@@ -39,9 +38,9 @@ public class UserTest {
     @Test
     @DisplayName("user can register")
     public void userCanRegisterNewProfile() {
-        UserRegistarationResponse response = userController.createUser(newUser)
+        ApiResponse response = userController.createUser(newUser)
                 .shouldHave(statusCode(200))
-                .asPojo(UserRegistarationResponse.class);
+                .asPojo(ApiResponse.class);
 
         assertEquals(valueOf(newUser.id()), response.getMessage());
     }
@@ -52,9 +51,9 @@ public class UserTest {
     public void getUserByName() {
         userController.createUser(newUser).shouldHave(statusCode(200));
 
-        GetUserResponse response = userController.getUserByName(newUser.username())
+        UserResponse response = userController.getUserByName(newUser.username())
                 .shouldHave(statusCode(200))
-                .asPojo(GetUserResponse.class);
+                .asPojo(UserResponse.class);
 
         assertAll(
                 () -> assertEquals(newUser.firstName(), response.getFirstName()),
@@ -111,9 +110,9 @@ public class UserTest {
 
         userController.updateUserByName(newUser.username(), updatedInfo).shouldHave(statusCode(200));
 
-        GetUserResponse response = userController.getUserByName(updatedInfo.username())
+        UserResponse response = userController.getUserByName(updatedInfo.username())
                 .shouldHave(statusCode(200))
-                .asPojo(GetUserResponse.class);
+                .asPojo(UserResponse.class);
 
         assertAll(
                 () -> assertEquals(updatedInfo.firstName(), response.getFirstName()),
@@ -135,9 +134,9 @@ public class UserTest {
         userController.createUser(newUser).shouldHave(statusCode(200));
         userController.deleteUserByName(newUser.username()).shouldHave(statusCode(200));
 
-        DefaultResponse response = userController.getUserByName(newUser.username())
+        ApiResponse response = userController.getUserByName(newUser.username())
                 .shouldHave(statusCode(404))
-                .asPojo(DefaultResponse.class);
+                .asPojo(ApiResponse.class);
 
         assertEquals("User not found", response.getMessage());
         assertEquals("error", response.getType());
@@ -180,9 +179,9 @@ public class UserTest {
     @DisplayName("User can't get info by invalid username")
     public void userCantGetInfoByInvalidUsername() {
 
-        DefaultResponse response = userController.getUserByName(faker.random().hex(10).toLowerCase())
+        ApiResponse response = userController.getUserByName(faker.random().hex(10).toLowerCase())
                 .shouldHave(statusCode(404))
-                .asPojo(DefaultResponse.class);
+                .asPojo(ApiResponse.class);
 
         assertEquals("User not found", response.getMessage());
     }
@@ -191,7 +190,8 @@ public class UserTest {
     @Test
     @DisplayName("User can't delete profile by invalid username")
     public void userCantDeleteProfileByInvalidUsername() {
-        userController.deleteUserByName(faker.random().hex(10).toLowerCase()).shouldHave(statusCode(404));
+        userController.deleteUserByName(faker.random().hex(10).toLowerCase())
+                .shouldHave(statusCode(404));
     }
-
 }
+

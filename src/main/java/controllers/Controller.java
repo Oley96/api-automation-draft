@@ -6,17 +6,17 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
+
 /**
  * @author Vladimir Oleynik
  */
 public class Controller {
 
     protected RequestSpecification setUp() {
-        return RestAssured
-                .given()
-                .header("api_key", "test_oleynik")
+        return RestAssured.given()
                 .baseUri("https://petstore.swagger.io")
                 .basePath("/v2")
+//                .header("api_key", Authentication.Login("test", "abc123"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .filters(new RequestLoggingFilter(), new ResponseLoggingFilter());

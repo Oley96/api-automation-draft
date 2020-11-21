@@ -7,7 +7,7 @@ import lombok.Getter;
  * @author Vladimir Oleynik
  */
 @Getter
-public class GetUserResponse {
+public class UserResponse {
 
     @JsonProperty("firstName")
     private String firstName;
