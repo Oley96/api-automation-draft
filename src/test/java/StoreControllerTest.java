@@ -51,12 +51,15 @@ public class StoreControllerTest {
     @Test
     @DisplayName("User can see order info by id")
     public void getOrderInfoById() {
+        //given
         storeController.placeOrder(order).shouldHave(statusCode(200));
 
+        //when
         OrderResponse response = storeController.findOrderById(order.id())
                 .shouldHave(statusCode(200))
                 .asPojo(OrderResponse.class);
 
+        //then
         assertAll(
                 () -> assertEquals(order.id(), response.getId()),
                 () -> assertEquals(order.petId(), response.getPetId()),
