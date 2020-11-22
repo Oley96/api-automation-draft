@@ -1,6 +1,5 @@
 package assertions;
 
-import conditions.Condition;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,8 @@ public class AssertableResponse {
 
     private final Response response;
 
-    public AssertableResponse shouldHave(Condition condition) {
-        condition.check(response);
+    public AssertableResponse shouldHaveStatusCode(int code) {
+        this.response.then().assertThat().statusCode(code);
         return this;
     }
 
@@ -26,17 +25,6 @@ public class AssertableResponse {
     public Headers headers() {
         return this.response.getHeaders();
     }
-
-    public AssertableResponse shouldHaveStatusCode(int code) {
-        this.response.then().assertThat().statusCode(code);
-        return this;
-
-    }
-
-
-
-
-
 
 
 }

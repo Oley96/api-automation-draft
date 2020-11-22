@@ -11,7 +11,6 @@ import responses.UserResponse;
 import java.util.Locale;
 
 import static assertions.CustomAssertions.assertions;
-import static conditions.Conditions.*;
 import static java.lang.String.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,7 +40,7 @@ public class UserControllerTest {
     public void userCanRegisterNewProfile() {
         //when
         ApiResponse response = userController.createUser(newUser)
-                .shouldHave(statusCode(200))
+                .shouldHaveStatusCode(200)
                 .asPojo(ApiResponse.class);
 
         //then
@@ -53,11 +52,11 @@ public class UserControllerTest {
     @DisplayName("get user by name")
     public void getUserByName() throws JsonProcessingException {
         //given
-        userController.createUser(newUser).shouldHave(statusCode(200));
+        userController.createUser(newUser).shouldHaveStatusCode(200);
 
         //when
         UserResponse response = userController.getUserByName(newUser.username())
-                .shouldHave(statusCode(200))
+                .shouldHaveStatusCode(200)
                 .asPojo(UserResponse.class);
         //then
         assertTrue(assertions().isMatch(newUser, response));
@@ -68,10 +67,10 @@ public class UserControllerTest {
     public void userCanLogin() {
         //given
         userController.createUser(newUser)
-                .shouldHave(statusCode(200));
+                .shouldHaveStatusCode(200);
         //when and then
         userController.loginUser(newUser.username(), newUser.password())
-                .shouldHave(statusCode(200));
+                .shouldHaveStatusCode(200);
     }
 
     @Test
@@ -79,20 +78,20 @@ public class UserControllerTest {
     public void loggedUserCanLogout() {
         //given
         userController.createUser(newUser)
-                .shouldHave(statusCode(200));
+                .shouldHaveStatusCode(200);
         userController.loginUser(newUser.username(), newUser.password())
-                .shouldHave(statusCode(200));
+                .shouldHaveStatusCode(200);
 
         //when, then
         userController.logoutUser()
-                .shouldHave(statusCode(200));
+                .shouldHaveStatusCode(200);
     }
 
     @Test
     @DisplayName("User can update profile info")
     public void userCanUpdateInfo() throws JsonProcessingException {
         //given
-        userController.createUser(newUser).shouldHave(statusCode(200));
+        userController.createUser(newUser).shouldHaveStatusCode(200);
         UserPayload updatedUser = new UserPayload()
                 .id(faker.random().nextInt(10000))
                 .username(faker.name().username())
@@ -104,11 +103,11 @@ public class UserControllerTest {
                 .userStatus(faker.random().nextInt(200));
 
         //when
-        userController.updateUserByName(newUser.username(), updatedUser).shouldHave(statusCode(200));
+        userController.updateUserByName(newUser.username(), updatedUser).shouldHaveStatusCode(200);
 
         //then
         UserResponse response = userController.getUserByName(updatedUser.username())
-                .shouldHave(statusCode(200))
+                .shouldHaveStatusCode(200)
                 .asPojo(UserResponse.class);
 
         assertTrue(assertions().isMatch(updatedUser, response));
@@ -118,14 +117,14 @@ public class UserControllerTest {
     @DisplayName("User can delete profile")
     public void userCanDeleteProfile() {
         //given
-        userController.createUser(newUser).shouldHave(statusCode(200));
+        userController.createUser(newUser).shouldHaveStatusCode(200);
 
         //when
-        userController.deleteUserByName(newUser.username()).shouldHave(statusCode(200));
+        userController.deleteUserByName(newUser.username()).shouldHaveStatusCode(200);
 
         //then
         ApiResponse response = userController.getUserByName(newUser.username())
-                .shouldHave(statusCode(404))
+                .shouldHaveStatusCode(404)
                 .asPojo(ApiResponse.class);
         assertEquals("User not found", response.getMessage());
         assertEquals("error", response.getType());
@@ -157,11 +156,11 @@ public class UserControllerTest {
         UserPayload[] payloads = {newUser1, newUser2};
 
         //when
-        userController.createArrayOfUsers(payloads).shouldHave(statusCode(200));
+        userController.createArrayOfUsers(payloads).shouldHaveStatusCode(200);
 
         //then
-        userController.getUserByName(newUser1.username()).shouldHave(statusCode(200));
-        userController.getUserByName(newUser2.username()).shouldHave(statusCode(200));
+        userController.getUserByName(newUser1.username()).shouldHaveStatusCode(200);
+        userController.getUserByName(newUser2.username()).shouldHaveStatusCode(200);
     }
 
     @Test
@@ -169,7 +168,7 @@ public class UserControllerTest {
     public void userCantGetInfoByInvalidUsername() {
         //when
         ApiResponse response = userController.getUserByName(faker.random().hex(10).toLowerCase())
-                .shouldHave(statusCode(404))
+                .shouldHaveStatusCode(404)
                 .asPojo(ApiResponse.class);
 
         //then

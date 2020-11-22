@@ -1,4 +1,3 @@
-import assertions.CustomAssertions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import controllers.StoreController;
@@ -11,7 +10,6 @@ import responses.OrderResponse;
 
 
 import static assertions.CustomAssertions.*;
-import static conditions.Conditions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -38,7 +36,7 @@ public class StoreControllerTest {
     @DisplayName("User can place an order for a pet")
     public void userCanPlaceOrder() throws JsonProcessingException {
         OrderResponse response = storeController.placeOrder(order)
-                .shouldHave(statusCode(200))
+                .shouldHaveStatusCode(200)
                 .asPojo(OrderResponse.class);
 
         assertTrue(assertions().isMatch(order, response));
@@ -48,11 +46,11 @@ public class StoreControllerTest {
     @DisplayName("User can see order info by id")
     public void getOrderInfoById() throws JsonProcessingException {
         //given
-        storeController.placeOrder(order).shouldHave(statusCode(200));
+        storeController.placeOrder(order).shouldHaveStatusCode(200);
 
         //when
         OrderResponse response = storeController.findOrderById(order.id())
-                .shouldHave(statusCode(200))
+                .shouldHaveStatusCode(200)
                 .asPojo(OrderResponse.class);
 
         //then
@@ -63,12 +61,12 @@ public class StoreControllerTest {
     @Test
     @DisplayName("user can delete order by id")
     public void userCanDeleteOrderById() {
-        storeController.placeOrder(order).shouldHave(statusCode(200));
+        storeController.placeOrder(order).shouldHaveStatusCode(200);
 
-        storeController.deleteOrderById(order.id()).shouldHave(statusCode(200));
+        storeController.deleteOrderById(order.id()).shouldHaveStatusCode(200);
 
         ApiResponse response = storeController.findOrderById(order.id())
-                .shouldHave(statusCode(404))
+                .shouldHaveStatusCode(404)
                 .asPojo(ApiResponse.class);
 
         assertEquals("Order not found", response.getMessage());
