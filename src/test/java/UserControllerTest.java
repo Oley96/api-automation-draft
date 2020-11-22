@@ -1,15 +1,16 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import controllers.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import payloads.CreateUserPayload;
-import payloads.UpdateUserPayload;
+import payloads.UserPayload;
 import responses.ApiResponse;
 import responses.UserResponse;
 
 import java.util.Locale;
 
+import static assertions.CustomAssertions.assertions;
 import static conditions.Conditions.*;
 import static java.lang.String.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,11 +20,11 @@ public class UserControllerTest {
 
     private final UserController userController = new UserController();
     private final Faker faker = new Faker(new Locale("en"));
-    CreateUserPayload newUser;
+    UserPayload newUser;
 
     @BeforeEach
     public void beforeEach() {
-        newUser = new CreateUserPayload()
+        newUser = new UserPayload()
                 .id(faker.random().nextInt(10000))
                 .username(faker.name().username())
                 .firstName(faker.name().firstName())
@@ -38,43 +39,37 @@ public class UserControllerTest {
     @Test
     @DisplayName("user can register")
     public void userCanRegisterNewProfile() {
+        //when
         ApiResponse response = userController.createUser(newUser)
                 .shouldHave(statusCode(200))
                 .asPojo(ApiResponse.class);
 
+        //then
         assertEquals(valueOf(newUser.id()), response.getMessage());
     }
 
 
     @Test
     @DisplayName("get user by name")
-    public void getUserByName() {
+    public void getUserByName() throws JsonProcessingException {
+        //given
         userController.createUser(newUser).shouldHave(statusCode(200));
 
+        //when
         UserResponse response = userController.getUserByName(newUser.username())
                 .shouldHave(statusCode(200))
                 .asPojo(UserResponse.class);
-
-        assertAll(
-                () -> assertEquals(newUser.firstName(), response.getFirstName()),
-                () -> assertEquals(newUser.lastName(), response.getLastName()),
-                () -> assertEquals(newUser.password(), response.getPassword()),
-                () -> assertEquals(newUser.userStatus(), response.getUserStatus()),
-                () -> assertEquals(newUser.phone(), response.getPhone()),
-                () -> assertEquals(newUser.id(), response.getId()),
-                () -> assertEquals(newUser.email(), response.getEmail()),
-                () -> assertEquals(newUser.username(), response.getUsername())
-        );
-
+        //then
+        assertTrue(assertions().isMatch(newUser, response));
     }
 
     @Test
-    @DisplayName("User can login with valid creds")
+    @DisplayName("User can login")
     public void userCanLogin() {
-
+        //given
         userController.createUser(newUser)
                 .shouldHave(statusCode(200));
-
+        //when and then
         userController.loginUser(newUser.username(), newUser.password())
                 .shouldHave(statusCode(200));
     }
@@ -82,22 +77,23 @@ public class UserControllerTest {
     @Test
     @DisplayName("User can logout")
     public void loggedUserCanLogout() {
+        //given
         userController.createUser(newUser)
                 .shouldHave(statusCode(200));
-
         userController.loginUser(newUser.username(), newUser.password())
                 .shouldHave(statusCode(200));
 
+        //when, then
         userController.logoutUser()
                 .shouldHave(statusCode(200));
     }
 
     @Test
     @DisplayName("User can update profile info")
-    public void userCanUpdateInfo() {
+    public void userCanUpdateInfo() throws JsonProcessingException {
+        //given
         userController.createUser(newUser).shouldHave(statusCode(200));
-
-        UpdateUserPayload updatedInfo = new UpdateUserPayload()
+        UserPayload updatedUser = new UserPayload()
                 .id(faker.random().nextInt(10000))
                 .username(faker.name().username())
                 .firstName(faker.name().firstName())
@@ -107,47 +103,39 @@ public class UserControllerTest {
                 .phone(faker.phoneNumber().cellPhone())
                 .userStatus(faker.random().nextInt(200));
 
+        //when
+        userController.updateUserByName(newUser.username(), updatedUser).shouldHave(statusCode(200));
 
-        userController.updateUserByName(newUser.username(), updatedInfo).shouldHave(statusCode(200));
-
-        UserResponse response = userController.getUserByName(updatedInfo.username())
+        //then
+        UserResponse response = userController.getUserByName(updatedUser.username())
                 .shouldHave(statusCode(200))
                 .asPojo(UserResponse.class);
 
-        assertAll(
-                () -> assertEquals(updatedInfo.firstName(), response.getFirstName()),
-                () -> assertEquals(updatedInfo.lastName(), response.getLastName()),
-                () -> assertEquals(updatedInfo.password(), response.getPassword()),
-                () -> assertEquals(updatedInfo.userStatus(), response.getUserStatus()),
-                () -> assertEquals(updatedInfo.phone(), response.getPhone()),
-                () -> assertEquals(updatedInfo.id(), response.getId()),
-                () -> assertEquals(updatedInfo.email(), response.getEmail()),
-                () -> assertEquals(updatedInfo.username(), response.getUsername())
-        );
-
-
+        assertTrue(assertions().isMatch(updatedUser, response));
     }
 
     @Test
     @DisplayName("User can delete profile")
     public void userCanDeleteProfile() {
+        //given
         userController.createUser(newUser).shouldHave(statusCode(200));
+
+        //when
         userController.deleteUserByName(newUser.username()).shouldHave(statusCode(200));
 
+        //then
         ApiResponse response = userController.getUserByName(newUser.username())
                 .shouldHave(statusCode(404))
                 .asPojo(ApiResponse.class);
-
         assertEquals("User not found", response.getMessage());
         assertEquals("error", response.getType());
-
     }
 
     @Test
     @DisplayName("User can create array of users")
     public void userCanCreateArrayOfUsers() {
-
-        CreateUserPayload newUser1 = new CreateUserPayload()
+        //given
+        UserPayload newUser1 = new UserPayload()
                 .id(faker.random().nextInt(10000))
                 .username(faker.name().username())
                 .firstName(faker.name().firstName())
@@ -157,7 +145,7 @@ public class UserControllerTest {
                 .phone(faker.phoneNumber().cellPhone())
                 .userStatus(faker.random().nextInt(200));
 
-        CreateUserPayload newUser2 = new CreateUserPayload()
+        UserPayload newUser2 = new UserPayload()
                 .id(faker.random().nextInt(10000))
                 .username(faker.name().username())
                 .firstName(faker.name().firstName())
@@ -166,11 +154,12 @@ public class UserControllerTest {
                 .password(faker.internet().password())
                 .phone(faker.phoneNumber().cellPhone())
                 .userStatus(faker.random().nextInt(200));
+        UserPayload[] payloads = {newUser1, newUser2};
 
-        CreateUserPayload[] payloads = {newUser1, newUser2};
-
+        //when
         userController.createArrayOfUsers(payloads).shouldHave(statusCode(200));
 
+        //then
         userController.getUserByName(newUser1.username()).shouldHave(statusCode(200));
         userController.getUserByName(newUser2.username()).shouldHave(statusCode(200));
     }
@@ -178,20 +167,21 @@ public class UserControllerTest {
     @Test
     @DisplayName("User can't get info by invalid username")
     public void userCantGetInfoByInvalidUsername() {
-
+        //when
         ApiResponse response = userController.getUserByName(faker.random().hex(10).toLowerCase())
                 .shouldHave(statusCode(404))
                 .asPojo(ApiResponse.class);
 
+        //then
         assertEquals("User not found", response.getMessage());
     }
-
 
     @Test
     @DisplayName("User can't delete profile by invalid username")
     public void userCantDeleteProfileByInvalidUsername() {
-        userController.deleteUserByName(faker.random().hex(10).toLowerCase())
-                .shouldHave(statusCode(404));
+        //when, then
+        userController.deleteUserByName(faker.name().username() + faker.random().nextInt(10000))
+                .shouldHaveStatusCode(404);
     }
 }
 

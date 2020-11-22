@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors(fluent = true)
-public class CreateUserPayload {
+public class UserPayload {
 
     @JsonProperty("firstName")
     private String firstName;

@@ -27,6 +27,12 @@ public class AssertableResponse {
         return this.response.getHeaders();
     }
 
+    public AssertableResponse shouldHaveStatusCode(int code) {
+        this.response.then().assertThat().statusCode(code);
+        return this;
+
+    }
+
 
 
 

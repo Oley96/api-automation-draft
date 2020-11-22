@@ -1,8 +1,11 @@
 package payloads;
 
+import lombok.ToString;
+
 /**
  * @author Vladimir Oleynik
  */
+@ToString
 public enum Status {
 
     AVAILABLE("available"),

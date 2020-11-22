@@ -11,10 +11,11 @@ import java.io.File;
  */
 public class PetController extends Controller {
 
-    public AssertableResponse uploadImageToPetById(int id, Status metaData, File file) {
+    public AssertableResponse uploadImageToPetById(int id, String metaData, File file) {
         return new AssertableResponse(setUp()
                 .formParam("additionalMetadata", metaData)
-                .formParam("file", file)
+                .contentType("multipart/form-data")
+                .multiPart("file", file, "image/jpeg")
                 .when()
                 .post("/pet/" + id + "/uploadImage"));
     }
@@ -35,7 +36,7 @@ public class PetController extends Controller {
 
     public AssertableResponse findPetsByStatus(Status status) {
         return new AssertableResponse(setUp()
-                .queryParam(status.getName())
+                .queryParam("status", status.getName())
                 .when()
                 .get("/pet/findByStatus"));
     }
@@ -43,22 +44,21 @@ public class PetController extends Controller {
     public AssertableResponse findPetById(int id) {
         return new AssertableResponse(setUp()
                 .when()
-                .get("/pet" + id));
+                .get("/pet/" + id));
     }
 
     public AssertableResponse updatePetNameAndStatusById(int id, String name, Status status) {
         return new AssertableResponse(setUp()
+                .contentType("application/x-www-form-urlencoded")
                 .formParam("name", name)
                 .formParam("status", status.getName())
                 .when()
-                .post("/pet" + id));
+                .post("/pet/" + id));
     }
 
-    public AssertableResponse deletePet(int id) {
+    public AssertableResponse deletePetById(int id) {
         return new AssertableResponse(setUp()
                 .when()
-                .delete("/pet" + id));
+                .delete("/pet/" + id));
     }
-
-
 }

@@ -1,19 +1,16 @@
 package controllers;
 
 import assertions.AssertableResponse;
-import payloads.CreateUserPayload;
-import payloads.UpdateUserPayload;
-
-import java.util.List;
+import payloads.UserPayload;
 
 /**
  * @author Vladimir Oleynik
  */
 public class UserController extends Controller {
 
-    public AssertableResponse createUser(CreateUserPayload createUserPayload) {
+    public AssertableResponse createUser(UserPayload userPayload) {
         return new AssertableResponse(setUp()
-                .body(createUserPayload)
+                .body(userPayload)
                 .when()
                 .post("/user"));
     }
@@ -40,7 +37,7 @@ public class UserController extends Controller {
         );
     }
 
-    public AssertableResponse updateUserByName(String userName, UpdateUserPayload payload) {
+    public AssertableResponse updateUserByName(String userName, UserPayload payload) {
         return new AssertableResponse(setUp()
                 .body(payload)
                 .when()
@@ -55,7 +52,7 @@ public class UserController extends Controller {
         );
     }
 
-    public AssertableResponse createArrayOfUsers(CreateUserPayload[] payloads) {
+    public AssertableResponse createArrayOfUsers(UserPayload[] payloads) {
         return new AssertableResponse(setUp()
                 .body(payloads)
                 .when()

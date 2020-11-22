@@ -1,3 +1,5 @@
+import assertions.CustomAssertions;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import controllers.StoreController;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +10,7 @@ import responses.ApiResponse;
 import responses.OrderResponse;
 
 
+import static assertions.CustomAssertions.*;
 import static conditions.Conditions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,24 +36,17 @@ public class StoreControllerTest {
 
     @Test
     @DisplayName("User can place an order for a pet")
-    public void userCanPlaceOrder() {
+    public void userCanPlaceOrder() throws JsonProcessingException {
         OrderResponse response = storeController.placeOrder(order)
                 .shouldHave(statusCode(200))
                 .asPojo(OrderResponse.class);
 
-        assertAll(
-                () -> assertEquals(order.id(), response.getId()),
-                () -> assertEquals(order.petId(), response.getPetId()),
-                () -> assertEquals(order.quantity(), response.getQuantity()),
-                () -> assertEquals(order.shipDate(), response.getShipDate()),
-                () -> assertEquals(order.status(), response.getStatus()),
-                () -> assertEquals(order.complete(), response.isComplete())
-        );
+        assertTrue(assertions().isMatch(order, response));
     }
 
     @Test
     @DisplayName("User can see order info by id")
-    public void getOrderInfoById() {
+    public void getOrderInfoById() throws JsonProcessingException {
         //given
         storeController.placeOrder(order).shouldHave(statusCode(200));
 
@@ -60,14 +56,7 @@ public class StoreControllerTest {
                 .asPojo(OrderResponse.class);
 
         //then
-        assertAll(
-                () -> assertEquals(order.id(), response.getId()),
-                () -> assertEquals(order.petId(), response.getPetId()),
-                () -> assertEquals(order.quantity(), response.getQuantity()),
-                () -> assertEquals(order.shipDate(), response.getShipDate()),
-                () -> assertEquals(order.status(), response.getStatus()),
-                () -> assertEquals(order.complete(), response.isComplete())
-        );
+        assertTrue(assertions().isMatch(order, response));
     }
 
 

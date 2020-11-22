@@ -19,5 +19,7 @@ public class Controller {
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+
     }
 }

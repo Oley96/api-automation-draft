@@ -1,14 +1,17 @@
 package payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 @Accessors(fluent = true)
 @Setter
 @Getter
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Category {
+
 
     @JsonProperty("name")
     private String name;
