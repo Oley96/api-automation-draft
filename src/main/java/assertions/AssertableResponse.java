@@ -22,7 +22,7 @@ public class AssertableResponse {
         return this.response.as(tClass);
     }
 
-    public Headers headers() {
+    public Headers getHeaders() {
         return this.response.getHeaders();
     }
 

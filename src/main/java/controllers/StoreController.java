@@ -33,5 +33,4 @@ public class StoreController extends Controller {
                 .when()
                 .get("/store/inventory"));
     }
-
 }

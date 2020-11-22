@@ -29,8 +29,4 @@ public class CustomAssertions {
     public boolean isMatch(Object pet1, Object pet2) throws JsonProcessingException {
         return mapper.writeValueAsString(pet1).equals(mapper.writeValueAsString(pet2));
     }
-
-
-
-
 }
