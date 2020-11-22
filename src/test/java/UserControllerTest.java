@@ -11,6 +11,7 @@ import responses.UserResponse;
 import java.util.Locale;
 
 import static assertions.CustomAssertions.assertions;
+import static helpers.ActionHelper.*;
 import static java.lang.String.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,19 +20,11 @@ public class UserControllerTest {
 
     private final UserController userController = new UserController();
     private final Faker faker = new Faker(new Locale("en"));
-    UserPayload newUser;
+    private UserPayload newUser;
 
     @BeforeEach
     public void beforeEach() {
-        newUser = new UserPayload()
-                .id(faker.random().nextInt(10000))
-                .username(faker.name().username())
-                .firstName(faker.name().firstName())
-                .lastName(faker.name().lastName())
-                .email(faker.internet().emailAddress())
-                .password(faker.internet().password())
-                .phone(faker.phoneNumber().cellPhone())
-                .userStatus(faker.random().nextInt(200));
+        newUser = actions().createUser();
     }
 
 
@@ -92,15 +85,7 @@ public class UserControllerTest {
     public void userCanUpdateInfo() throws JsonProcessingException {
         //given
         userController.createUser(newUser).shouldHaveStatusCode(200);
-        UserPayload updatedUser = new UserPayload()
-                .id(faker.random().nextInt(10000))
-                .username(faker.name().username())
-                .firstName(faker.name().firstName())
-                .lastName(faker.name().lastName())
-                .email(faker.internet().emailAddress())
-                .password(faker.internet().password())
-                .phone(faker.phoneNumber().cellPhone())
-                .userStatus(faker.random().nextInt(200));
+        UserPayload updatedUser = actions().createUser();
 
         //when
         userController.updateUserByName(newUser.username(), updatedUser).shouldHaveStatusCode(200);
@@ -134,25 +119,8 @@ public class UserControllerTest {
     @DisplayName("User can create array of users")
     public void userCanCreateArrayOfUsers() {
         //given
-        UserPayload newUser1 = new UserPayload()
-                .id(faker.random().nextInt(10000))
-                .username(faker.name().username())
-                .firstName(faker.name().firstName())
-                .lastName(faker.name().lastName())
-                .email(faker.internet().emailAddress())
-                .password(faker.internet().password())
-                .phone(faker.phoneNumber().cellPhone())
-                .userStatus(faker.random().nextInt(200));
-
-        UserPayload newUser2 = new UserPayload()
-                .id(faker.random().nextInt(10000))
-                .username(faker.name().username())
-                .firstName(faker.name().firstName())
-                .lastName(faker.name().lastName())
-                .email(faker.internet().emailAddress())
-                .password(faker.internet().password())
-                .phone(faker.phoneNumber().cellPhone())
-                .userStatus(faker.random().nextInt(200));
+        UserPayload newUser1 = actions().createUser();
+        UserPayload newUser2 = actions().createUser();
         UserPayload[] payloads = {newUser1, newUser2};
 
         //when

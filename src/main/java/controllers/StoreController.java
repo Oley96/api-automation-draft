@@ -1,14 +1,14 @@
 package controllers;
 
 import assertions.AssertableResponse;
-import payloads.PlaceOrderPayload;
+import payloads.OrderPayload;
 
 /**
  * @author Vladimir Oleynik
  */
 public class StoreController extends Controller {
 
-    public AssertableResponse placeOrder(PlaceOrderPayload payload) {
+    public AssertableResponse placeOrder(OrderPayload payload) {
         return new AssertableResponse(setUp()
                 .body(payload)
                 .when()

@@ -12,6 +12,7 @@ import responses.PetResponse;
 
 import java.io.File;
 
+import static helpers.ActionHelper.*;
 import static assertions.CustomAssertions.assertions;
 import static java.lang.String.*;
 import static java.util.Arrays.*;
@@ -29,16 +30,7 @@ public class PetControllerTest {
 
     @BeforeEach
     public void setUp() {
-        pet = new PetPayload()
-                .id(faker.random().nextInt(1000))
-                .category(new Category("Dogs", faker.random().nextInt(10000)))
-                .name("Tomas" + faker.random().nextInt(10000))
-                .photoUrls(asList("http://test.com", "http://aaa.com"))
-                .tags(asList(
-                        new TagsItem("dog", faker.random().nextInt(10000)),
-                        new TagsItem("staff", faker.random().nextInt(10000)))
-                )
-                .status(AVAILABLE.getName());
+        pet = actions().createPet();
     }
 
     @Test
@@ -75,16 +67,7 @@ public class PetControllerTest {
     public void userCanUpdatePet() throws JsonProcessingException {
         //given
         petController.addPet(pet);
-        PetPayload newPet = new PetPayload()
-                .id(faker.random().nextInt(1000))
-                .category(new Category("Dogs", faker.random().nextInt(10000)))
-                .name("Tomas" + faker.random().nextInt(10000))
-                .photoUrls(asList("http://test.com", "http://aaa.com"))
-                .tags(asList(
-                        new TagsItem("dog", faker.random().nextInt(10000)),
-                        new TagsItem("staff", faker.random().nextInt(10000)))
-                )
-                .status(SOLD.getName());
+        PetPayload newPet = actions().createPet();
         //when
         PetResponse response = petController.updatePet(newPet)
                 .shouldHaveStatusCode(200)

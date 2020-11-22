@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(fluent = true)
 
-public class PlaceOrderPayload{
+public class OrderPayload {
 
 	@JsonProperty("petId")
 	private int petId;

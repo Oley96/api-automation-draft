@@ -4,12 +4,13 @@ import controllers.StoreController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import payloads.PlaceOrderPayload;
+import payloads.OrderPayload;
 import responses.ApiResponse;
 import responses.OrderResponse;
 
 
 import static assertions.CustomAssertions.*;
+import static helpers.ActionHelper.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -17,19 +18,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class StoreControllerTest {
     private final StoreController storeController = new StoreController();
-    private PlaceOrderPayload order;
-    private final Faker faker = new Faker();
+    private OrderPayload order;
 
 
     @BeforeEach
     public void setUp() {
-        order = new PlaceOrderPayload()
-                .id(faker.random().nextInt(1000))
-                .petId(faker.number().numberBetween(10000, 9000))
-                .quantity(faker.random().nextInt(50))
-                .shipDate("2020-11-21T17:32:37.461+0000")
-                .status("approve")
-                .complete(true);
+        order = actions().createOrder();
     }
 
     @Test
@@ -71,6 +65,4 @@ public class StoreControllerTest {
 
         assertEquals("Order not found", response.getMessage());
     }
-
-
 }
