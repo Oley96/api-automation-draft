@@ -1,5 +1,4 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.javafaker.Faker;
 import controllers.StoreController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +9,7 @@ import responses.OrderResponse;
 
 
 import static assertions.CustomAssertions.*;
-import static helpers.ActionHelper.*;
+import static utils.ActionHelper.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

@@ -2,7 +2,7 @@ package controllers;
 
 import assertions.AssertableResponse;
 import payloads.PetPayload;
-import payloads.Status;
+import payloads.enums.Status;
 
 import java.io.File;
 

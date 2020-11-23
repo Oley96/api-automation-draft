@@ -1,23 +1,21 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.javafaker.Faker;
 import controllers.PetController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import payloads.Category;
+import org.junit.jupiter.api.parallel.Execution;
 import payloads.PetPayload;
-import payloads.TagsItem;
 import responses.ApiResponse;
 import responses.PetResponse;
 
 import java.io.File;
 
-import static helpers.ActionHelper.*;
+import static org.junit.jupiter.api.parallel.ExecutionMode.*;
+import static utils.ActionHelper.*;
 import static assertions.CustomAssertions.assertions;
 import static java.lang.String.*;
-import static java.util.Arrays.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static payloads.Status.*;
+import static payloads.enums.Status.*;
 
 /**
  * @author Vladimir Oleynik
@@ -25,7 +23,6 @@ import static payloads.Status.*;
 public class PetControllerTest {
 
     private final PetController petController = new PetController();
-    private final Faker faker = new Faker();
     private PetPayload pet;
 
     @BeforeEach
@@ -97,6 +94,7 @@ public class PetControllerTest {
         //when
         PetResponse response = petController.findPetById(pet.id())
                 .shouldHaveStatusCode(200)
+                .shouldMatchWithJsonSchema("pet__schema.json")
                 .asPojo(PetResponse.class);
         //then
         assertEquals(pet.hashCode(), response.hashCode(), "Objects do not match");

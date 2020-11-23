@@ -11,10 +11,9 @@ import responses.UserResponse;
 import java.util.Locale;
 
 import static assertions.CustomAssertions.assertions;
-import static helpers.ActionHelper.*;
+import static utils.ActionHelper.*;
 import static java.lang.String.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 public class UserControllerTest {
 
