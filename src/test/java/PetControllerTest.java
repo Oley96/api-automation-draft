@@ -3,14 +3,15 @@ import controllers.PetController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import payloads.PetPayload;
+import payloads.enums.Status;
 import responses.ApiResponse;
 import responses.PetResponse;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.parallel.ExecutionMode.*;
 import static utils.ActionHelper.*;
 import static assertions.CustomAssertions.assertions;
 import static java.lang.String.*;
@@ -73,16 +74,16 @@ public class PetControllerTest {
         assertTrue(assertions().isMatch(newPet, response), "Objects do not match");
     }
 
-    //need parametrize
-    @Test
+    @ParameterizedTest
+    @EnumSource(value = Status.class, names = {"AVAILABLE", "SOLD", "PENDING"})
     @DisplayName("Should returns only pets with selected status")
-    public void shouldReturnOnlyPetsWithSelectedStatus() {
+    public void shouldReturnOnlyPetsWithSelectedStatus(Status status) {
         //when
-        PetResponse[] pets = petController.findPetsByStatus(AVAILABLE)
+        PetResponse[] pets = petController.findPetsByStatus(status)
                 .shouldHaveStatusCode(200)
                 .asPojo(PetResponse[].class);
         //then
-        assertTrue(assertions().checkPetStatuses(pets, AVAILABLE), "Not all response contains selected status");
+        assertTrue(assertions().checkPetStatuses(pets, status), "Not all response contains selected status");
     }
 
     @Test
