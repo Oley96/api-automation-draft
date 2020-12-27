@@ -1,10 +1,10 @@
-package responses;
+package entities.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-public class Category{
+public class TagsItem{
 
 	@JsonProperty("name")
 	private String name;

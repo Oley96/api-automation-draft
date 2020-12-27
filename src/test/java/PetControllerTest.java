@@ -5,18 +5,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import payloads.PetPayload;
-import payloads.enums.Status;
-import responses.ApiResponse;
-import responses.PetResponse;
+import entities.payloads.PetPayload;
+import entities.payloads.enums.Status;
+import entities.responses.ApiResponse;
+import entities.responses.PetResponse;
 
 import java.io.File;
 
-import static utils.ActionHelper.*;
+import static utils.Actions.*;
 import static assertions.CustomAssertions.assertions;
 import static java.lang.String.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static payloads.enums.Status.*;
+import static entities.payloads.enums.Status.*;
 
 /**
  * @author Vladimir Oleynik
@@ -74,7 +74,7 @@ public class PetControllerTest {
         assertTrue(assertions().isMatch(newPet, response), "Objects do not match");
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{displayName}[{index}] {arguments}")
     @EnumSource(value = Status.class, names = {"AVAILABLE", "SOLD", "PENDING"})
     @DisplayName("Should returns only pets with selected status")
     public void shouldReturnOnlyPetsWithSelectedStatus(Status status) {

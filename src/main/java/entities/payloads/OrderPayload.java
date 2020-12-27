@@ -1,4 +1,4 @@
-package payloads;
+package entities.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

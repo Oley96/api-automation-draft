@@ -1,4 +1,4 @@
-package payloads.enums;
+package entities.payloads.enums;
 
 import lombok.ToString;
 

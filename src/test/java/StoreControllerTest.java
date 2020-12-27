@@ -3,13 +3,13 @@ import controllers.StoreController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import payloads.OrderPayload;
-import responses.ApiResponse;
-import responses.OrderResponse;
+import entities.payloads.OrderPayload;
+import entities.responses.ApiResponse;
+import entities.responses.OrderResponse;
 
 
 import static assertions.CustomAssertions.*;
-import static utils.ActionHelper.*;
+import static utils.Actions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

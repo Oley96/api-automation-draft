@@ -1,19 +1,15 @@
-package payloads;
+package entities.responses;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 
-@Getter
-@Setter
-@Accessors(fluent = true)
 @ToString
+@Getter
 @EqualsAndHashCode
-public class PetPayload{
+public class PetResponse{
 
 	@JsonProperty("photoUrls")
 	private List<String> photoUrls;
@@ -22,7 +18,7 @@ public class PetPayload{
 	private String name;
 
 	@JsonProperty("id")
-	private int id;
+	private long id;
 
 	@JsonProperty("category")
 	private Category category;

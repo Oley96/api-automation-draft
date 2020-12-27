@@ -1,16 +1,13 @@
-package payloads;
+package entities.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
+/**
+ * @author Vladimir Oleynik
+ */
 @Getter
-@Setter
-@ToString
-@Accessors(fluent = true)
-public class UserPayload {
+public class UserResponse {
 
     @JsonProperty("firstName")
     private String firstName;

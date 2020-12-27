@@ -2,8 +2,8 @@ package assertions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import payloads.enums.Status;
-import responses.PetResponse;
+import entities.payloads.enums.Status;
+import entities.responses.PetResponse;
 
 import static java.util.Arrays.*;
 

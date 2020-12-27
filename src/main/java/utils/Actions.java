@@ -1,23 +1,22 @@
 package utils;
 
 import com.github.javafaker.Faker;
-import payloads.*;
+import entities.payloads.*;
 
 import static java.util.Arrays.asList;
-import static payloads.enums.Status.AVAILABLE;
+import static entities.payloads.enums.Status.AVAILABLE;
 
 /**
  * @author Vladimir Oleynik
  */
-public final class ActionHelper {
+public final class Actions {
     private final Faker faker = new Faker();
 
-    private ActionHelper() {
-
+    private Actions() {
     }
 
-    public static ActionHelper actions() {
-        return new ActionHelper();
+    public static Actions actions() {
+        return new Actions();
     }
 
     public PetPayload createPet() {

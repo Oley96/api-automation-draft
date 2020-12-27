@@ -1,16 +1,18 @@
 package controllers;
 
 import assertions.AssertableResponse;
-import payloads.PetPayload;
-import payloads.enums.Status;
+import entities.payloads.PetPayload;
+import entities.payloads.enums.Status;
+import io.qameta.allure.Step;
 
 import java.io.File;
 
 /**
  * @author Vladimir Oleynik
  */
-public class PetController extends Controller {
+public class PetController extends Configuration {
 
+    @Step
     public AssertableResponse uploadImageToPetById(int id, String metaData, File file) {
         return new AssertableResponse(setUp()
                 .formParam("additionalMetadata", metaData)
@@ -20,6 +22,7 @@ public class PetController extends Controller {
                 .post("/pet/" + id + "/uploadImage"));
     }
 
+    @Step
     public AssertableResponse addPet(PetPayload pet) {
         return new AssertableResponse(setUp()
                 .body(pet)
@@ -27,6 +30,7 @@ public class PetController extends Controller {
                 .post("/pet"));
     }
 
+    @Step
     public AssertableResponse updatePet(PetPayload pet) {
         return new AssertableResponse(setUp()
                 .body(pet)
@@ -34,6 +38,7 @@ public class PetController extends Controller {
                 .put("/pet"));
     }
 
+    @Step
     public AssertableResponse findPetsByStatus(Status status) {
         return new AssertableResponse(setUp()
                 .queryParam("status", status.getName())
@@ -41,12 +46,14 @@ public class PetController extends Controller {
                 .get("/pet/findByStatus"));
     }
 
+    @Step
     public AssertableResponse findPetById(int id) {
         return new AssertableResponse(setUp()
                 .when()
                 .get("/pet/" + id));
     }
 
+    @Step
     public AssertableResponse updatePetNameAndStatusById(int id, String name, Status status) {
         return new AssertableResponse(setUp()
                 .contentType("application/x-www-form-urlencoded")
@@ -56,6 +63,7 @@ public class PetController extends Controller {
                 .post("/pet/" + id));
     }
 
+    @Step
     public AssertableResponse deletePetById(int id) {
         return new AssertableResponse(setUp()
                 .when()

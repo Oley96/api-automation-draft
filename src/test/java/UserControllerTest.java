@@ -4,14 +4,14 @@ import controllers.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import payloads.UserPayload;
-import responses.ApiResponse;
-import responses.UserResponse;
+import entities.payloads.UserPayload;
+import entities.responses.ApiResponse;
+import entities.responses.UserResponse;
 
 import java.util.Locale;
 
 import static assertions.CustomAssertions.assertions;
-import static utils.ActionHelper.*;
+import static utils.Actions.*;
 import static java.lang.String.*;
 import static org.junit.jupiter.api.Assertions.*;
 
